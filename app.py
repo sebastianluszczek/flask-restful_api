@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_restful import Api
 
-from resources.items import Item, Items
-from resources.stores import Stores
+from resources.itemResources import Item, Items
+from resources.storeResources import Stores
 
 from db import db, ma
 

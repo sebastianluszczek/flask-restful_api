@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 
+from db import db
+
 from models.storeModel import StoreModel, StoreSchema
 
 store_parser = reqparse.RequestParser()
@@ -21,4 +23,4 @@ class Stores(Resource):
         db.session.add(store)
         db.session.commit()
 
-        return {'item': store_schema.dump(store)}, 201
+        return {'store': store_schema.dump(store)}, 201

@@ -1,5 +1,7 @@
 from flask_restful import Resource, reqparse
 
+from db import db
+
 from models.itemModel import ItemModel, ItemSchema
 
 items_schema = ItemSchema(many=True)
