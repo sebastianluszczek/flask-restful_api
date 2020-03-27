@@ -1,8 +1,10 @@
 from flask_restful import Resource, reqparse
 
-from db import db
+from utils.db import db
 
 from models.itemModel import ItemModel, ItemSchema
+
+from flask_jwt import jwt_required
 
 items_schema = ItemSchema(many=True)
 item_schema = ItemSchema()
@@ -18,6 +20,7 @@ class Items(Resource):
 
         return {'items': items_schema.dump(items)}, 200
 
+    @jwt_required()
     def post(self):
         data = item_parser.parse_args()
         item = ItemModel(**data)
@@ -28,13 +31,14 @@ class Items(Resource):
         return {'item': item_schema.dump(item)}, 201
 
 class Item(Resource):
-    def get(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    def get(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         return {'item': item_schema.dump(item)}, 200
 
-    def put(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    @jwt_required()
+    def put(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         data = item_parser.parse_args()
         for key, val in data.items():
@@ -44,8 +48,9 @@ class Item(Resource):
         
         return {'item': item_schema.dump(item)}, 201
 
-    def delete(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first()
+    @jwt_required()
+    def delete(self, id):
+        item = ItemModel.query.filter_by(id = id).first()
 
         db.session.delete(item)
         db.session.commit()
