@@ -19,33 +19,33 @@ class Items(Resource):
 
     def post(self):
         data = parser.parse_args()
-        data['_id'] = str(uuid4())
+        data['id'] = str(uuid4())
         items.append(data)
         return {'item': data}, 201
 
 class Item(Resource):
-    def get(self, _id):
-        item = next(filter(lambda x: x['_id'] == _id, items), None)
+    def get(self, id):
+        item = next(filter(lambda x: x['id'] == id, items), None)
         return {'item': item}, 200 if item else 404
     
-    def put(self, _id):
+    def put(self, id):
         data = parser.parse_args()
-        item = next(filter(lambda x: x['_id'] == _id, items), None)
+        item = next(filter(lambda x: x['id'] == id, items), None)
 
         if item:
             item.update(data)
             return {'item': item}, 200
         else:
-            data['_id'] = _id
+            data['id'] = id
             items.append(data)
             return {'item': data}, 201
 
-    def delete(self, _id):
+    def delete(self, id):
         global items
-        items = list(filter(lambda x: x['_id'] != _id, items))
-        return {'message': f'item {_id} deleted'}, 200
+        items = list(filter(lambda x: x['id'] != id, items))
+        return {'message': f'item {id} deleted'}, 200
         
 
 api.add_resource(Items, '/items')
-api.add_resource(Item, '/items/<string:_id>')
+api.add_resource(Item, '/items/<string:id>')
 
