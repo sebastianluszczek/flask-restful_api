@@ -7,8 +7,9 @@ from resources.storeResources import Stores
 from resources.authResources import UsersRegister
 
 from utils.auth import authenticate, identity
-from utils.db import db, ma
 from utils.bcrypt import bcrypt
+
+from db import db, ma
 
 app = Flask(__name__)
 

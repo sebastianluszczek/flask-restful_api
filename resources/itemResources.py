@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from utils.db import db
+from db import db
 
 from models.itemModel import ItemModel, ItemSchema
 
