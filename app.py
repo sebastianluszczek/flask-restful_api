@@ -16,7 +16,7 @@ api = Api(app)
 class ItemModel(db.Model):
     __tablename__ = 'items'
     
-    _id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
@@ -25,11 +25,11 @@ class ItemModel(db.Model):
 
 class ItemSchema(ma.Schema):
     class Meta:
-        fields = ('_id', 'name', 'price', '_links')
+        fields = ('id', 'name', 'price', '_links')
 
     # Smart hyperlinking
     _links = ma.Hyperlinks(
-        {"self": ma.URLFor('item', _id="<_id>"), "collection": ma.URLFor('items')}
+        {"self": ma.URLFor('item', id="<id>"), "collection": ma.URLFor('items')}
     )
 
 items_schema = ItemSchema(many=True)
@@ -56,13 +56,13 @@ class Items(Resource):
         return {'item': item_schema.dump(item)}, 201
 
 class Item(Resource):
-    def get(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    def get(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         return {'item': item_schema.dump(item)}, 200
 
-    def put(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    def put(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         data = parser.parse_args()
         for key, val in data.items():
@@ -72,8 +72,8 @@ class Item(Resource):
         
         return {'item': item_schema.dump(item)}, 201
 
-    def delete(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first()
+    def delete(self, id):
+        item = ItemModel.query.filter_by(id = id).first()
 
         db.session.delete(item)
         db.session.commit()
@@ -82,5 +82,5 @@ class Item(Resource):
         
 
 api.add_resource(Items, '/items', endpoint='items')
-api.add_resource(Item, '/items/<_id>', endpoint='item')
+api.add_resource(Item, '/items/<id>', endpoint='item')
 
