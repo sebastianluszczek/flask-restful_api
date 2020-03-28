@@ -16,4 +16,4 @@ ma.init_app(ma)
 api = Api(app)
 
 api.add_resource(Items, '/items', endpoint='items')
-api.add_resource(Item, '/items/<_id>', endpoint='item')
+api.add_resource(Item, '/items/<id>', endpoint='item')

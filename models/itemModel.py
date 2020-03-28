@@ -3,7 +3,7 @@ from db import db, ma
 class ItemModel(db.Model):
     __tablename__ = 'items'
     
-    _id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     price = db.Column(db.Float, nullable=False)
 
@@ -12,9 +12,9 @@ class ItemModel(db.Model):
 
 class ItemSchema(ma.Schema):
     class Meta:
-        fields = ('_id', 'name', 'price', '_links')
+        fields = ('id', 'name', 'price', '_links')
 
     # Smart hyperlinking
     _links = ma.Hyperlinks(
-        {"self": ma.URLFor('item', _id="<_id>"), "collection": ma.URLFor('items')}
+        {"self": ma.URLFor('item', id="<id>"), "collection": ma.URLFor('items')}
     )

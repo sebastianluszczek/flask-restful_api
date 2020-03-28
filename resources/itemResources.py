@@ -24,13 +24,13 @@ class Items(Resource):
         return {'item': item_schema.dump(item)}, 201
 
 class Item(Resource):
-    def get(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    def get(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         return {'item': item_schema.dump(item)}, 200
 
-    def put(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first_or_404(f'No item with _id: {_id}')
+    def put(self, id):
+        item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
         data = parser.parse_args()
         for key, val in data.items():
@@ -40,8 +40,8 @@ class Item(Resource):
         
         return {'item': item_schema.dump(item)}, 201
 
-    def delete(self, _id):
-        item = ItemModel.query.filter_by(_id = _id).first()
+    def delete(self, id):
+        item = ItemModel.query.filter_by(id = id).first()
 
         db.session.delete(item)
         db.session.commit()
