@@ -1,10 +1,8 @@
 from flask_restful import Resource, reqparse
 
-from utils.db import db
+from db import db
 
 from models.itemModel import ItemModel, ItemSchema
-
-from flask_jwt import jwt_required
 
 items_schema = ItemSchema(many=True)
 item_schema = ItemSchema()
@@ -12,7 +10,7 @@ item_schema = ItemSchema()
 item_parser = reqparse.RequestParser()
 item_parser.add_argument('name', type=str, required=True)
 item_parser.add_argument('price', type=float, required=True)
-item_parser.add_argument('store_id', type=int, required=True)
+item_parser.add_argument('storeid', type=int, required=True)
 
 class Items(Resource):
     def get(self):
@@ -20,7 +18,6 @@ class Items(Resource):
 
         return {'items': items_schema.dump(items)}, 200
 
-    @jwt_required()
     def post(self):
         data = item_parser.parse_args()
         item = ItemModel(**data)
@@ -36,7 +33,6 @@ class Item(Resource):
 
         return {'item': item_schema.dump(item)}, 200
 
-    @jwt_required()
     def put(self, id):
         item = ItemModel.query.filter_by(id = id).first_or_404(f'No item with id: {id}')
 
@@ -48,7 +44,6 @@ class Item(Resource):
         
         return {'item': item_schema.dump(item)}, 201
 
-    @jwt_required()
     def delete(self, id):
         item = ItemModel.query.filter_by(id = id).first()
 

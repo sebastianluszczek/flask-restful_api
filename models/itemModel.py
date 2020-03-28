@@ -1,4 +1,4 @@
-from utils.db import db, ma
+from db import db, ma
 
 class ItemModel(db.Model):
     __tablename__ = 'items'
@@ -6,7 +6,7 @@ class ItemModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'),
+    storeid = db.Column(db.Integer, db.ForeignKey('stores.id'),
         nullable=False)
 
     def __repr__(self):
@@ -14,8 +14,8 @@ class ItemModel(db.Model):
 
 class ItemSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'price', 'store_id')
+        fields = ('id', 'name', 'price', 'storeid', '_links')
 
-    # _links = ma.Hyperlinks(
-    #     {"self": ma.URLFor('item', _id="<_id>"), "collection": ma.URLFor('items')}
-    # )
+    _links = ma.Hyperlinks(
+        {"self": ma.URLFor('item', id="<id>"), "collection": ma.URLFor('items')}
+    )
